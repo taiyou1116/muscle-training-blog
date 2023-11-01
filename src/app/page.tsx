@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <div className=" h-screen flex items-center justify-center">
-      { user ? 
+    { user ? 
       (
         <>
           <UserInfo />
@@ -17,7 +17,7 @@ export default function Home() {
       ) : (
         <SignInButton />
       )
-      }
+    }
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "./firebase";
+import Image from "next/image";
 
 // Buttonでサインイン
 export function SignInButton() {
@@ -34,9 +35,20 @@ export function SignOutButton() {
 }
 
 export function UserInfo() {
+  const photoURL = auth.currentUser?.photoURL;
+
   return (
     <div>
-      Userinfo
+      {photoURL ? (
+        <Image 
+          src={photoURL}
+          alt="User profile picture" // alt属性
+          width={100} // 画像の幅
+          height={100} // 画像の高さ
+        />
+      ) : (
+        <p>No profile picture available</p>
+      )}
     </div>
-  )
+  );
 }
