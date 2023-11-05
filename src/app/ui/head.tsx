@@ -31,7 +31,9 @@ export default function Head() {
           <div className=" font-bold pt-5 underline">
             🏠ホーム
           </div>
-          <SignInButton />
+          <div className=" ml-auto">
+            <SignInButton />
+          </div>
         </>
         )
       }
