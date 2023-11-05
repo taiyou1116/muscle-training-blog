@@ -9,12 +9,11 @@ export function SignInButton() {
   }
 
   return(
-    <div className=" bg-slate-400 flex flex-col rounded-md shadow-md p-10 gap-5">
-      <h1 className="font-bold">ログインする</h1>
+    <div>
       <button 
-        className="bg-orange-400 p-2 rounded-md text-white font-bold" 
+        className=" bg-sky-400 p-2 rounded-md text-white font-bold shadow-md hover:bg-sky-500" 
         onClick={() => signInWithGoogle()}>
-        グーグルでサインイン
+        Googleでサインイン
       </button>
     </div>
   )
@@ -23,10 +22,9 @@ export function SignInButton() {
 // サインアウトボタン
 export function SignOutButton() {
   return(
-    <div className=" bg-slate-400 flex flex-col rounded-md shadow-md p-10 gap-5">
-      <h1 className="font-bold">サインアウトする</h1>
+    <div>
       <button 
-        className="bg-orange-400 p-2 rounded-md text-white font-bold" 
+        className=" bg-red-400 p-2 rounded-md text-white font-bold shadow-md hover:bg-red-500" 
         onClick={() => auth.signOut()}>
         サインアウト
       </button>
@@ -44,8 +42,8 @@ export function UserInfo() {
         <Image 
           src={photoURL}
           alt="User profile picture" // alt属性
-          width={100} // 画像の幅
-          height={100} // 画像の高さ
+          width={40} // 画像の幅
+          height={40} // 画像の高さ
         />
       ) : (
         <p>No profile picture available</p>
