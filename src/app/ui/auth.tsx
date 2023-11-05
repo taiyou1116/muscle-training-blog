@@ -1,8 +1,8 @@
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "./firebase";
+import { auth, provider } from "../lib/firebase"
 import Image from "next/image";
 
-// Buttonでサインイン
+// サインインボタン
 export function SignInButton() {
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider);
@@ -20,7 +20,7 @@ export function SignInButton() {
   )
 }
 
-// Buttonでサインアウト
+// サインアウトボタン
 export function SignOutButton() {
   return(
     <div className=" bg-slate-400 flex flex-col rounded-md shadow-md p-10 gap-5">
@@ -34,6 +34,7 @@ export function SignOutButton() {
   )
 }
 
+// ユーザー情報の表示
 export function UserInfo() {
   const photoURL = auth.currentUser?.photoURL;
 
