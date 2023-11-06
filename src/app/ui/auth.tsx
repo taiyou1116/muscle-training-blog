@@ -1,13 +1,35 @@
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../lib/firebase"
+import { auth, db, provider } from "../lib/firebase"
 import Image from "next/image";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import React from 'react';
+
+const signInWithGoogle = async () => {
+  const result = await signInWithPopup(auth, provider);
+
+  // 認証情報からユーザー情報を取得
+  const user = result.user;
+
+  const userRef = doc(db, "posts", user.uid);
+  const docSnap = await getDoc(userRef);
+
+  // ユーザーデータがまだFirestoreにない場合は新しく作成
+  if (!docSnap.exists()) {
+    await setDoc(userRef, {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      // その他保存したいユーザー情報
+    });
+    console.log("新しいユーザープロファイルを作成しました。");
+  } else {
+    console.log("既存のユーザーです。");
+  }
+}
 
 // サインインボタン
 export function SignInButton() {
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider);
-  }
-
   return(
     <div>
       <button 

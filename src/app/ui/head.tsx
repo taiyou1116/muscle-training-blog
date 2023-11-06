@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link";
 import { auth } from "../lib/firebase";
 import { SignInButton, SignOutButton, UserInfo } from "./auth";
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -11,14 +12,16 @@ export default function Head() {
       { user ? (
         <>
         {/* アイコンは変更する */}
-          <div className=" font-bold pt-5 underline">
+          <div className=" font-bold pt-5 underline cursor-pointer">
             🏠ホーム
           </div>
-          <div className=" font-bold pt-5 underline">
+          <div className=" font-bold pt-5 underline cursor-pointer">
             👨マイページ
           </div>
-          <div className=" font-bold pt-5 underline">
-            ✒️投稿
+          <div className=" font-bold pt-5 underline cursor-pointer">
+            <Link href="/post/create">
+              ✒️投稿
+            </Link>
           </div>
           {/* autoはできる限りのmarginをとる */}
           <div className=" flex gap-3 ml-auto">
