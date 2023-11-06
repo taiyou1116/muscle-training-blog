@@ -18,7 +18,7 @@ export default async function TimeLine() {
   console.log(res);
 
   return (
-    <div className='flex flex-col items-center w-3/5 h-full bg-slate-200 rounded-md gap-5 p-5'>
+    <div className='flex flex-col items-center w-3/5 h-full bg-slate-50 rounded-md gap-8 p-10'>
       { res.map((data, index) => (
         <div key={index} className='w-full'>
           <Post 
