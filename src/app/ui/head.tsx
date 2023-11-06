@@ -13,7 +13,9 @@ export default function Head() {
         <>
         {/* アイコンは変更する */}
           <div className=" font-bold pt-5 underline cursor-pointer">
-            🏠ホーム
+            <Link href="/">
+              🏠ホーム
+            </Link>
           </div>
           <div className=" font-bold pt-5 underline cursor-pointer">
             👨マイページ

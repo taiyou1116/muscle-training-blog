@@ -3,5 +3,7 @@
 @tailwind utilities;
 
 body {
-    background-color: rgb(208, 208, 208);
+  background-color: rgb(208, 208, 208);
+  max-height: 100vh;
+  overflow: hidden;
 }
