@@ -2,11 +2,18 @@
 
 import React from 'react'
 
-function Post() {
+type postProps = {
+  title: string,
+  text: string,
+}
+
+function Post(props: postProps) {
+  const { title, text } = props;
+
   return (
-    <div>
-      <h1>title</h1>
-      <p>本文</p>
+    <div className=' bg-slate-300 w-full flex flex-col p-3'>
+      <h1>{ title }</h1>
+      <p>{ text }</p>
     </div>
   )
 }

@@ -1,14 +1,16 @@
 import React from 'react'
-import { collection, getDocs } from "firebase/firestore";
+import { getDocs, query, collectionGroup } from "firebase/firestore";
 import { db } from '../lib/firebase';
+import Post from './post';
 
 const getData = async () => {
-  const postData = collection(db, "posts");
-  const snapshot = await getDocs(postData);
-  
-  const docsData = snapshot.docs.map(doc => doc.data());
-  return docsData;
-}
+  // サブコレクション 'sub' の全てのドキュメントにアクセスする
+  const postsQuery = query(collectionGroup(db, 'sub'));
+  const snapshot = await getDocs(postsQuery);
+
+  const postsData = snapshot.docs.map(doc => doc.data());
+  return postsData;
+};
 
 export default async function TimeLine() {
 
@@ -16,13 +18,13 @@ export default async function TimeLine() {
   console.log(res);
 
   return (
-    <div>
-      {/* DBからタイムラインを取得してmapでpostを表示 */}
-      <div>time-line</div>
-      { res.map((data) => (
-        <div key={data.title}>
-          <h1>{data.title}</h1>
-          <p>{data.text}</p>
+    <div className='flex flex-col items-center w-3/5 h-full bg-slate-200 rounded-md gap-5 p-5'>
+      { res.map((data, index) => (
+        <div key={index} className='w-full'>
+          <Post 
+            title={ data.title }
+            text={ data.text }
+          />
         </div>
       )) }
     </div>
