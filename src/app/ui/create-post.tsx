@@ -1,5 +1,6 @@
 "use client"
 import React, { ChangeEvent, useState } from 'react'
+import Input from '../components/Input';
 
 function CreatePost() {
   return (
@@ -67,12 +68,13 @@ function ExercisePostForm() {
     <form onSubmit={handleSubmit} className='flex flex-col gap-4 items-center p-4 bg-white shadow-md rounded-lg'>
       <label htmlFor="exercise-select" className='font-semibold text-lg'>種目を選択:</label>
       <div className="flex gap-2 w-full max-w-md">
-        <input
-          list="exercises-list"
-          value={selectedExercise}
+        <Input 
+          type='input'
+          list='exercises-list'
+          value={ selectedExercise }
           onChange={handleInputChange}
-          placeholder="種目を入力または選択"
-          className='w-full border border-gray-300 rounded-md text-gray-700 py-2 px-4 focus:ring-blue-500 focus:border-blue-500'
+          placeholder='種目を入力または選択'
+          classname='select'
         />
         <datalist id="exercises-list">
           {exercises.map((exercise) => (
@@ -83,11 +85,10 @@ function ExercisePostForm() {
 
     {/* セット数入力 */}
     <div className='flex gap-2 w-full max-w-md'>
-      <input
+      <Input 
         type='number'
         placeholder='セット数'
         onChange={handleSetCountChange}
-        className='w-1/3 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500'
       />
     </div>
 
@@ -96,19 +97,17 @@ function ExercisePostForm() {
     {sets.map((set, index) => (
       <div key={index} className='flex gap-2 w-full max-w-md'>
         <span>{`${index + 1}セット目:`}</span>
-        <input
+        <Input 
           type='number'
           placeholder='重さ (kg)'
           value={set.weight}
           onChange={handleSetChange(index, 'weight')}
-          className='w-1/3 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500'
         />
-        <input
+        <Input 
           type='number'
           placeholder='回数'
           value={set.reps}
           onChange={handleSetChange(index, 'reps')}
-          className='w-1/3 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500'
         />
       </div>
     ))}
