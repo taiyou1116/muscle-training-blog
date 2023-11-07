@@ -3,11 +3,24 @@ import React, { ChangeEvent, useState } from 'react'
 import Input from '../components/Input';
 
 function CreatePost() {
+  const [ showForm, setShowForm ] = useState(false);
+
   return (
     <div className="flex justify-center h-screen w-full mt-5">
       <div className='flex flex-col items-center w-3/5 h-full bg-slate-50 rounded-md gap-8 p-10'>
         <h1 className=' font-bold text-lg'>新しい投稿</h1>
-          <ExercisePostForm /> 
+        { !showForm && 
+          <div>
+            <button
+              className="py-2 px-4 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
+              onClick={() => setShowForm(!showForm)}
+            >
+              + 種目を追加
+            </button>
+          </div>
+        }
+        
+        { showForm && <ExercisePostForm setShowForm={setShowForm}/>  }
       </div>
     </div>
   )
@@ -16,9 +29,13 @@ function CreatePost() {
 export default CreatePost
 
 
+type formProps = {
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>,
+}
 
+function ExercisePostForm(props: formProps) {
+  const { setShowForm } = props;
 
-function ExercisePostForm() {
   // 利用可能な筋トレの種目
   const exercises = [
     'ベンチプレス',
@@ -28,7 +45,7 @@ function ExercisePostForm() {
   ];
 
   // 選択された筋トレの種目を保持するための状態
-  const [selectedExercise, setSelectedExercise] = useState(exercises[0]);
+  const [selectedExercise, setSelectedExercise] = useState("");
 
   // テキスト入力を変更したときに発火する関数
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -83,42 +100,48 @@ function ExercisePostForm() {
         </datalist>
       </div>
 
-    {/* セット数入力 */}
-    <div className='flex gap-2 w-full max-w-md'>
-      <Input 
-        type='number'
-        placeholder='セット数'
-        onChange={handleSetCountChange}
-      />
-    </div>
-
-    {/* セットごとの重さと回数入力 */}
-    <div className='overflow-auto max-h-64 w-full'>
-    {sets.map((set, index) => (
-      <div key={index} className='flex gap-2 w-full max-w-md'>
-        <span>{`${index + 1}セット目:`}</span>
+      {/* セット数入力 */}
+      <div className='flex gap-2 w-full max-w-md'>
         <Input 
           type='number'
-          placeholder='重さ (kg)'
-          value={set.weight}
-          onChange={handleSetChange(index, 'weight')}
-        />
-        <Input 
-          type='number'
-          placeholder='回数'
-          value={set.reps}
-          onChange={handleSetChange(index, 'reps')}
+          placeholder='セット数'
+          onChange={handleSetCountChange}
         />
       </div>
-    ))}
-    </div>
-    
-    <button
-      type="submit"
-      className='mt-4 bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:shadow-outline'
-    >
-      追加
-    </button>
-  </form>
+
+      {/* セットごとの重さと回数入力 */}
+      <div className='overflow-auto max-h-64 w-full flex flex-col gap-1'>
+        {sets.map((set, index) => (
+          <div key={index} className='flex gap-2 w-full max-w-md items-center justify-center'>
+            <span>{`${index + 1}セット目:`}</span>
+            <Input 
+              type='number'
+              placeholder='重さ (kg)'
+              value={set.weight}
+              onChange={handleSetChange(index, 'weight')}
+            />
+            <Input 
+              type='number'
+              placeholder='回数'
+              value={set.reps}
+              onChange={handleSetChange(index, 'reps')}
+            />
+          </div>
+        ))}
+      </div>
+      <div className=' flex gap-10'>
+        <button
+          type="submit"
+          className='mt-4 bg-blue-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-blue-600'
+        >
+          追加
+        </button>
+        <button onClick={() => setShowForm(false)}
+          className='mt-4 bg-slate-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-slate-600'
+        >
+          キャンセル
+        </button>
+      </div>
+    </form>
   );
 }
