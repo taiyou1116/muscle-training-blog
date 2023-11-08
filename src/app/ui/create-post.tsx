@@ -2,14 +2,7 @@
 import React, { ChangeEvent, useState } from 'react'
 import Input from '../components/Input';
 import { createNewPost } from '../lib/firebase';
-
-type ExerciseData = {
-  selectedExercise: string;
-  sets: Array<{
-    weight: string;
-    reps: string;
-  }>;
-};
+import { ExerciseData } from '../types/exercise-data';
 
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);

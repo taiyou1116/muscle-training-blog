@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { addDoc, collection, collectionGroup, doc, getDoc, getDocs, getFirestore, query, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_APIKEY,
@@ -82,3 +82,48 @@ export const createNewPost = async (exercisesData: any, text: string) => {
     console.error('Error writing document: ', e);
   }
 }
+
+// 全てのdata取得
+export const getData = async () => {
+
+  // サブコレクション 'sub' の全てのドキュメントにアクセスする
+  const postsQuery = query(collectionGroup(db, 'sub'));
+  const snapshot = await getDocs(postsQuery);
+
+  const postsData = snapshot.docs.map(doc => doc.data());
+  return postsData;
+};
+
+
+export const getDataa = async () => {
+  // サブコレクション 'sub' の全てのドキュメントにアクセスする
+  const postsQuery = query(collectionGroup(db, 'sub'));
+  const snapshot = await getDocs(postsQuery);
+
+  // 各ドキュメントに対して親ドキュメントの情報を取得
+  const postsData = snapshot.docs.map(async (doc) => {
+    // サブドキュメントの親ドキュメントへの参照を取得
+    const parentDocRef = doc.ref.parent.parent;
+
+    // 親ドキュメントの参照がnullでないことを確認
+    if (parentDocRef) {
+      // 親ドキュメントのデータを取得
+      const parentDocSnapshot = await getDoc(parentDocRef);
+      // 親ドキュメントのデータとサブドキュメントのデータを組み合わせる
+      return {
+        id: doc.id,
+        ...doc.data(),
+        parentData: parentDocSnapshot.data()
+      };
+    } else {
+      // 親ドキュメントの参照がnullの場合は、サブドキュメントのデータのみを返す
+      return {
+        id: doc.id,
+        ...doc.data(),
+        parentData: null
+      };
+    }
+  });
+
+  return postsData;
+};
