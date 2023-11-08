@@ -83,47 +83,28 @@ export const createNewPost = async (exercisesData: any, text: string) => {
   }
 }
 
-// 全てのdata取得
 export const getData = async () => {
 
   // サブコレクション 'sub' の全てのドキュメントにアクセスする
   const postsQuery = query(collectionGroup(db, 'sub'));
   const snapshot = await getDocs(postsQuery);
 
-  const postsData = snapshot.docs.map(doc => doc.data());
-  return postsData;
-};
-
-
-export const getDataa = async () => {
-  // サブコレクション 'sub' の全てのドキュメントにアクセスする
-  const postsQuery = query(collectionGroup(db, 'sub'));
-  const snapshot = await getDocs(postsQuery);
-
-  // 各ドキュメントに対して親ドキュメントの情報を取得
-  const postsData = snapshot.docs.map(async (doc) => {
-    // サブドキュメントの親ドキュメントへの参照を取得
+  const postsData = await Promise.all(snapshot.docs.map(async (doc) => {
+    
     const parentDocRef = doc.ref.parent.parent;
-
     // 親ドキュメントの参照がnullでないことを確認
     if (parentDocRef) {
       // 親ドキュメントのデータを取得
       const parentDocSnapshot = await getDoc(parentDocRef);
       // 親ドキュメントのデータとサブドキュメントのデータを組み合わせる
+      console.log(parentDocSnapshot.data());
       return {
-        id: doc.id,
         ...doc.data(),
-        parentData: parentDocSnapshot.data()
+        parentData: parentDocSnapshot.data()|| {}
       };
-    } else {
-      // 親ドキュメントの参照がnullの場合は、サブドキュメントのデータのみを返す
-      return {
-        id: doc.id,
-        ...doc.data(),
-        parentData: null
-      };
+    }else {
+      return { ...doc.data(), parentData: {} }; // 親ドキュメントが存在しない場合の対応。
     }
-  });
-
+  }));
   return postsData;
 };
