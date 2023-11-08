@@ -27,6 +27,7 @@ function Input(props: inputProps) {
       value={ value }
       list={ list }
       className={` ${ selectClassName }` }
+      min={1}
     />
   )
 }

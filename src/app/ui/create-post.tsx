@@ -46,13 +46,15 @@ function CreatePost() {
 export default CreatePost
 
 
-type formProps = {
+type FormProps = {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>,
   addExerciseData: (newData: ExerciseData) => void,
 }
 
-function ExercisePostForm(props: formProps) {
+function ExercisePostForm(props: FormProps) {
   const { setShowForm, addExerciseData } = props;
+  // 選択された筋トレの種目を保持するための状態
+  const [selectedExercise, setSelectedExercise] = useState("");
 
   // 利用可能な筋トレの種目
   const exercises = [
@@ -62,14 +64,16 @@ function ExercisePostForm(props: formProps) {
     'バーベルカール',
   ];
 
-  // 選択された筋トレの種目を保持するための状態
-  const [selectedExercise, setSelectedExercise] = useState("");
+  type Set = {
+    weight: string,
+    reps: string,
+  }
 
   // テキスト入力を変更したときに発火する関数
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedExercise(event.target.value);
   };
-  
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -81,11 +85,11 @@ function ExercisePostForm(props: formProps) {
 
     // 親コンポーネントの状態更新関数を呼び出してデータを追加
     addExerciseData(newExerciseData);
-    setShowForm(false); // フォーム送信後にフォームを閉じる
+    setShowForm(false);
   };
 
   // セット数とそれに対応する重さと回数を保持するためのstate
-  const [sets, setSets] = useState([{ weight: '', reps: '' }]);
+  const [sets, setSets] = useState<Set[]>([{ weight: '', reps: '' }]);
 
   // セット数が変更されたときに呼ばれる関数
   const handleSetCountChange = (event: ChangeEvent<HTMLInputElement>) => {
