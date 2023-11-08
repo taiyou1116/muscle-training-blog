@@ -19,8 +19,8 @@ function CreatePost() {
   };
 
   return (
-    <div className="flex justify-center h-screen w-full mt-5">
-      <div className='flex flex-col items-center w-3/5 h-full bg-slate-50 rounded-lg shadow-md gap-8 p-10'>
+    <div className="flex justify-center h-[calc(100vh-7rem)] w-full mt-5">
+      <div className='flex flex-col items-center w-3/5 h-full bg-slate-50 rounded-lg shadow-md gap-5 p-8'>
         <h1 className=' font-bold text-lg'>新しい投稿</h1>
         { !showForm && 
           <div>
@@ -38,6 +38,19 @@ function CreatePost() {
         { exercisesData.map((data, index) => (
           <p key={index}>{`${data.selectedExercise} - セット数: ${data.sets.length}, 各セット: ${data.sets.map(set => `${set.weight}kg x ${set.reps}回`).join(', ')}`}</p>
         ))}
+
+        <div className=' bg-slate-200 h-full w-full rounded-md p-3 shadow-lg'>
+          <textarea placeholder='自由欄: 好きなことを書こう(300文字まで)' className='bg-slate-200 h-full w-full rounded-md p-3 outline-none resize-none'/>
+        </div>
+      </div>
+      <div className=' bg-slate-50 ml-5 h-3/6 w-1/6 rounded-lg shadow-md flex flex-col gap-8 p-8'>
+        <h1 className=' font-bold'>投稿</h1>
+        <button className='bg-blue-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-blue-600'>
+          投稿する
+        </button>
+        <button className='bg-slate-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-slate-600'>
+          下書き保存
+        </button>
       </div>
     </div>
   )
