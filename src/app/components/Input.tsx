@@ -23,7 +23,7 @@ function Input(props: inputProps) {
     <input
       type={ type }
       placeholder={ placeholder }
-      onChange={(e) => onChange(e)}
+      onChange={onChange}
       value={ value }
       list={ list }
       className={` ${ selectClassName }` }

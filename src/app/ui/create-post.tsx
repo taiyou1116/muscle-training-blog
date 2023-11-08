@@ -2,8 +2,21 @@
 import React, { ChangeEvent, useState } from 'react'
 import Input from '../components/Input';
 
+type ExerciseData = {
+  selectedExercise: string;
+  sets: Array<{
+    weight: string;
+    reps: string;
+  }>;
+};
+
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);
+  const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
+
+  const addExerciseData = (newData: ExerciseData) => {
+    setExercisesData([...exercisesData, newData]);
+  };
 
   return (
     <div className="flex justify-center h-screen w-full mt-5">
@@ -19,8 +32,12 @@ function CreatePost() {
             </button>
           </div>
         }
-        
-        { showForm && <ExercisePostForm setShowForm={setShowForm}/>  }
+
+        { showForm && <ExercisePostForm setShowForm={setShowForm} addExerciseData={addExerciseData} /> }
+
+        { exercisesData.map((data, index) => (
+          <p key={index}>{`${data.selectedExercise} - セット数: ${data.sets.length}, 各セット: ${data.sets.map(set => `${set.weight}kg x ${set.reps}回`).join(', ')}`}</p>
+        ))}
       </div>
     </div>
   )
@@ -31,10 +48,11 @@ export default CreatePost
 
 type formProps = {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>,
+  addExerciseData: (newData: ExerciseData) => void,
 }
 
 function ExercisePostForm(props: formProps) {
-  const { setShowForm } = props;
+  const { setShowForm, addExerciseData } = props;
 
   // 利用可能な筋トレの種目
   const exercises = [
@@ -51,12 +69,19 @@ function ExercisePostForm(props: formProps) {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedExercise(event.target.value);
   };
-
-  // フォームを提出する際のハンドラー
+  
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // ここで選択された種目を処理する
-    console.log(`Selected exercise: ${selectedExercise}`);
+
+    // 新しいエクササイズデータを作成
+    const newExerciseData: ExerciseData = {
+      selectedExercise,
+      sets
+    };
+
+    // 親コンポーネントの状態更新関数を呼び出してデータを追加
+    addExerciseData(newExerciseData);
+    setShowForm(false); // フォーム送信後にフォームを閉じる
   };
 
   // セット数とそれに対応する重さと回数を保持するためのstate
