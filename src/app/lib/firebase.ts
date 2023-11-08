@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_APIKEY,
@@ -55,4 +55,30 @@ export const signOut = () => {
 export const showUserProfile = () => {
   const photoURL = auth.currentUser?.photoURL;
   return photoURL;
+}
+
+/**与えられたユーザーIDに基づいて、新しい投稿をFirestoreのサブコレクションに追加します。*/
+export const createNewPost = async (exercisesData: any, text: string) => {
+  const uid = auth.currentUser?.uid;
+  if (!uid) {
+    console.error('ユーザーが認証されていません。');
+    return;
+  }
+  
+  try {
+    // 親ドキュメントの参照を取得
+    const postDocRef = doc(db, 'posts', uid);
+    // サブコレクションへの参照を取得
+    const subCollectionRef = collection(postDocRef, 'sub');
+
+    // 新しいドキュメントをサブコレクションに追加
+    const docRef = await addDoc(subCollectionRef, {
+      exercisesData: exercisesData,
+      text: text
+    });
+
+    console.log('Document successfully written!');
+  } catch (e) {
+    console.error('Error writing document: ', e);
+  }
 }

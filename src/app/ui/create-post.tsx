@@ -1,6 +1,7 @@
 "use client"
 import React, { ChangeEvent, useState } from 'react'
 import Input from '../components/Input';
+import { createNewPost } from '../lib/firebase';
 
 type ExerciseData = {
   selectedExercise: string;
@@ -13,6 +14,7 @@ type ExerciseData = {
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);
   const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
+  const [text, setText] = useState('');
 
   const addExerciseData = (newData: ExerciseData) => {
     setExercisesData([...exercisesData, newData]);
@@ -40,12 +42,16 @@ function CreatePost() {
         ))}
 
         <div className=' bg-slate-200 h-full w-full rounded-md p-3 shadow-lg'>
-          <textarea placeholder='自由欄: 好きなことを書こう(300文字まで)' className='bg-slate-200 h-full w-full rounded-md p-3 outline-none resize-none'/>
+          <textarea onChange={(e) => setText(e.target.value)} placeholder='自由欄: 好きなことを書こう(300文字まで)' className='bg-slate-200 h-full w-full rounded-md p-3 outline-none resize-none'/>
         </div>
       </div>
+
       <div className=' bg-slate-50 ml-5 h-3/6 w-1/6 rounded-lg shadow-md flex flex-col gap-8 p-8'>
         <h1 className=' font-bold'>投稿</h1>
-        <button className='bg-blue-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-blue-600'>
+        <button 
+          onClick={() => createNewPost(exercisesData, text)}
+          className='bg-blue-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-blue-600'
+        >
           投稿する
         </button>
         <button className='bg-slate-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-slate-600'>
