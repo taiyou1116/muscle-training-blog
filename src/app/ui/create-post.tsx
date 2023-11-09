@@ -4,17 +4,40 @@ import Input from '../components/Input';
 import { createNewPost } from '../lib/firebase';
 import { ExerciseData } from '../types/exercise-data';
 import { PhotoIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);
   const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
   const [text, setText] = useState('');
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const addExerciseData = (newData: ExerciseData) => {
     setExercisesData([...exercisesData, newData]);
   };
 
-
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const files = e.target.files;
+    const imageUrls: string[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target) {
+          imageUrls.push(e.target.result as string);
+          if (imageUrls.length === files.length) {
+            // 全ての画像が読み込まれたら、状態を更新
+            setImageUrls(imageUrls);
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
 
   return (
     <div className="flex justify-center h-[calc(100vh-7rem)] w-full mt-5">
@@ -31,9 +54,9 @@ function CreatePost() {
             <div>
               <label htmlFor='file-upload-input' className=' flex bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 gap-1 p-2 cursor-pointer'>
                 <PhotoIcon className='h-6 w-6'/>
-                ファイルの選択
+                写真の選択
               </label>
-              <input id="file-upload-input" type="file" accept="image/*" style={{ display: 'none' }} />
+              <input id="file-upload-input" type="file" accept="image/*" multiple onChange={handleFileChange} style={{ display: 'none' }} />
             </div>
           </div>
         }
@@ -43,6 +66,14 @@ function CreatePost() {
         { exercisesData.map((data, index) => (
           <p key={index}>{`${data.selectedExercise} - セット数: ${data.sets.length}, 各セット: ${data.sets.map(set => `${set.weight}kg x ${set.reps}回`).join(', ')}`}</p>
         ))}
+
+        <div className='flex'>
+          { imageUrls.map((image, index) => (
+            <div className='flex' key={index}>
+              <Image src={image} width={100} height={100} alt="Uploaded Image" />
+            </div>
+          )) }
+        </div>
 
         <div className=' bg-slate-200 h-full w-full rounded-md p-3 shadow-lg'>
           <textarea onChange={(e) => setText(e.target.value)} placeholder='自由欄: 好きなことを書こう(300文字まで)' className='bg-slate-200 h-full w-full rounded-md p-3 outline-none resize-none'/>
