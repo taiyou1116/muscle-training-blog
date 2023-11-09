@@ -3,6 +3,7 @@ import React, { ChangeEvent, useState } from 'react'
 import Input from '../components/Input';
 import { createNewPost } from '../lib/firebase';
 import { ExerciseData } from '../types/exercise-data';
+import { PhotoIcon } from '@heroicons/react/24/outline';
 
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);
@@ -18,12 +19,18 @@ function CreatePost() {
       <div className='flex flex-col items-center w-3/5 h-full bg-slate-50 rounded-lg shadow-md gap-5 p-8'>
         <h1 className=' font-bold text-lg'>新しい投稿</h1>
         { !showForm && 
-          <div>
+          <div className='flex gap-2'>
             <button
               className="py-2 px-4 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
               onClick={() => setShowForm(!showForm)}
             >
-              + 種目を追加
+              種目を追加
+            </button>
+            <button
+              className="py-2 px-4 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 flex gap-1"
+            >
+              <PhotoIcon className='h-6 w-6'/>
+              写真の追加
             </button>
           </div>
         }
