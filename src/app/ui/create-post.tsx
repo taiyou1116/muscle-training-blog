@@ -5,6 +5,8 @@ import { createNewPost } from '../lib/firebase';
 import { ExerciseData } from '../types/exercise-data';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
 
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);
@@ -46,13 +48,14 @@ function CreatePost() {
         { !showForm && 
           <div className='flex gap-2'>
             <button
-              className="py-2 px-4 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600"
+              className="py-2 px-4 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 flex gap-1 items-center"
               onClick={() => setShowForm(!showForm)}
             >
-              種目を追加
+              <FontAwesomeIcon icon={faDumbbell} />
+              種目の追加
             </button>
             <div>
-              <label htmlFor='file-upload-input' className=' flex bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 gap-1 p-2 cursor-pointer'>
+              <label htmlFor='file-upload-input' className=' flex bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 gap-1 p-2 cursor-pointer'>
                 <PhotoIcon className='h-6 w-6'/>
                 写真の選択
               </label>
