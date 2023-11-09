@@ -97,13 +97,12 @@ export const getData = async () => {
       // 親ドキュメントのデータを取得
       const parentDocSnapshot = await getDoc(parentDocRef);
       // 親ドキュメントのデータとサブドキュメントのデータを組み合わせる
-      console.log(parentDocSnapshot.data());
       return {
         ...doc.data(),
         parentData: parentDocSnapshot.data()|| {}
       };
     }else {
-      return { ...doc.data(), parentData: {} }; // 親ドキュメントが存在しない場合の対応。
+      return { ...doc.data(), parentData: {} };
     }
   }));
   return postsData;

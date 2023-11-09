@@ -12,8 +12,8 @@ function Post(props: Props) {
   const { data } = props;
 
   return (
-    <div className='bg-slate-200 w-full flex flex-col p-5 rounded-md hover:bg-slate-300 border border-slate-400 cursor-pointer'>
-      <div className=' flex'>
+    <div className='bg-slate-200 w-full flex flex-col p-5 gap-3 rounded-md border border-slate-400 cursor-pointer'>
+      <div className=' flex gap-3  bg-slate-300 p-3 rounded-lg shadow-lg'>
         {data.parentData.photoURL ? (
           <Image
             src={data.parentData.photoURL}
@@ -26,18 +26,24 @@ function Post(props: Props) {
         )}
         { data.parentData.displayName }
       </div>
-      { data.text }
-      { data.exercisesData.map((d: ExerciseData, dataIndex: number) => (
+      <div className=' bg-slate-50 p-3'>
+        { data.exercisesData.map((d: ExerciseData, dataIndex: number) => (
         <React.Fragment key={dataIndex}>
-          <span>{d.selectedExercise}</span>
+          <h1 className=' font-semibold'>{d.selectedExercise}</h1>
           {d.sets.map((set, index) => (
             <div key={index}>
+              <span>{ index + 1 }セット目: </span>
               <span>Reps: {set.reps} </span>
               <span>Weight: {set.weight}</span>
             </div>
           ))}
         </React.Fragment>
       )) }
+      </div>
+      
+      <div className=' p-3'>
+        { data.text }
+      </div>
     </div>
   )
 }
