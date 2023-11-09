@@ -18,7 +18,9 @@ export default function Head() {
             </Link>
           </div>
           <div className=" font-bold pt-5 underline cursor-pointer">
-            👨マイページ
+            <Link href="/mypage">
+              👨マイページ
+            </Link>
           </div>
           <div className=" font-bold pt-5 underline cursor-pointer">
             <Link href="/post/create">
