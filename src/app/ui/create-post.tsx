@@ -1,6 +1,7 @@
 "use client"
 import React, { ChangeEvent, useState } from 'react'
 import Input from '../components/Input';
+import Button from '../components/Button';
 import { createNewPost } from '../lib/firebase';
 import { ExerciseData } from '../types/exercise-data';
 import { PhotoIcon } from '@heroicons/react/24/outline';
@@ -47,13 +48,13 @@ function CreatePost() {
         <h1 className=' font-bold text-lg'>新しい投稿</h1>
         { !showForm && 
           <div className='flex gap-2'>
-            <button
-              className="py-2 px-4 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 flex gap-1 items-center"
+            <Button 
               onClick={() => setShowForm(!showForm)}
-            >
-              <FontAwesomeIcon icon={faDumbbell} />
-              種目の追加
-            </button>
+              className='blue'
+              original='py-2 px-4'
+              emoji={ <FontAwesomeIcon icon={faDumbbell} />}
+              title='種目の追加'
+            />
             <div>
               <label htmlFor='file-upload-input' className=' flex bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 gap-1 p-2 cursor-pointer'>
                 <PhotoIcon className='h-6 w-6'/>
@@ -70,10 +71,11 @@ function CreatePost() {
           <p key={index}>{`${data.selectedExercise} - セット数: ${data.sets.length}, 各セット: ${data.sets.map(set => `${set.weight}kg x ${set.reps}回`).join(', ')}`}</p>
         ))}
 
-        <div className='flex'>
+        {/* 写真の表示 */}
+        <div className='flex gap-3'>
           { imageUrls.map((image, index) => (
             <div className='flex' key={index}>
-              <Image src={image} width={100} height={100} alt="Uploaded Image" />
+              <Image src={image} width={50} height={50} alt="Uploaded Image" />
             </div>
           )) }
         </div>
@@ -85,12 +87,12 @@ function CreatePost() {
 
       <div className=' bg-slate-50 ml-5 h-3/6 w-1/6 rounded-lg shadow-md flex flex-col gap-8 p-8'>
         <h1 className=' font-bold'>投稿</h1>
-        <button 
+        <Button 
           onClick={() => createNewPost(exercisesData, text)}
-          className='bg-blue-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-blue-600'
-        >
-          投稿する
-        </button>
+          className='blue'
+          original='py-2 px-12'
+          title='投稿する'
+        />
         <button className='bg-slate-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-slate-600'>
           下書き保存
         </button>
@@ -215,17 +217,18 @@ function ExercisePostForm(props: FormProps) {
         ))}
       </div>
       <div className=' flex gap-10'>
-        <button
-          type="submit"
-          className='mt-4 bg-blue-500 text-white font-bold py-2 px-12 rounded-lg hover:bg-blue-600'
-        >
-          追加
-        </button>
-        <button onClick={() => setShowForm(false)}
-          className='mt-4 bg-slate-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-slate-600'
-        >
-          キャンセル
-        </button>
+        <Button 
+          type='submit'
+          className='blue'
+          original='py-2 px-12 mt-4'
+          title='追加'
+        />
+        <Button 
+          onClick={() => setShowForm(false)}
+          className='slate'
+          original='py-2 px-6 mt-4'
+          title='キャンセル'
+        />
       </div>
     </form>
   );
