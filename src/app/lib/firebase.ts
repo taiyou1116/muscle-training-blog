@@ -22,6 +22,7 @@ const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+export { auth }
 
 // Googleでサインイン & DBと紐付け
 export const signInWithGoogle = async () => {

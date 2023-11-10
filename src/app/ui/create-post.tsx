@@ -9,6 +9,8 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
 
+const MAX_SIZE = 2 * 1024 * 1024;
+
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);
   // 写真一時保存
@@ -17,16 +19,28 @@ function CreatePost() {
   const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
   const [text, setText] = useState('');
   const [ fileList, setFiles ] = useState<FileList>();
+  
 
   const addExerciseData = (newData: ExerciseData) => {
     setExercisesData([...exercisesData, newData]);
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) {
-      return;
+    if (!e.target.files) return;
+    if (e.target.files.length > 2) {
+      alert("最大2枚の写真を選択してください。");
+      e.target.value = '';
     }
     const files = e.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].size > MAX_SIZE) {
+        alert(`一枚のファイルサイズは2MB以下にしてください。`);
+        e.target.value = ''; // ファイル選択をリセット
+        return;
+      }
+    }
+
     setFiles(files);
 
     const imageUrls = Array.from(files).map(file => URL.createObjectURL(file));
@@ -42,7 +56,7 @@ function CreatePost() {
             <Button 
               onClick={() => setShowForm(!showForm)}
               className='blue'
-              original='py-2 px-4'
+              original='py-2 px-4 flex items-center gap-1 mb-5'
               emoji={ <FontAwesomeIcon icon={faDumbbell} />}
               title='種目の追加'
             />
@@ -51,6 +65,7 @@ function CreatePost() {
                 <PhotoIcon className='h-6 w-6'/>
                 写真の選択
               </label>
+              <div className='text-xs text-gray-500 mt-1'>最大2枚まで</div>
               <input id="file-upload-input" type="file" accept="image/*" multiple onChange={handleFileChange} style={{ display: 'none' }} />
             </div>
           </div>
