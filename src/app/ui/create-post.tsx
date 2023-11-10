@@ -11,9 +11,12 @@ import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
 
 function CreatePost() {
   const [ showForm, setShowForm ] = useState(false);
+  // 写真一時保存
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  // createPostに送るデータ
   const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
   const [text, setText] = useState('');
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [ fileList, setFiles ] = useState<FileList>();
 
   const addExerciseData = (newData: ExerciseData) => {
     setExercisesData([...exercisesData, newData]);
@@ -24,23 +27,11 @@ function CreatePost() {
       return;
     }
     const files = e.target.files;
-    const imageUrls: string[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target) {
-          imageUrls.push(e.target.result as string);
-          if (imageUrls.length === files.length) {
-            // 全ての画像が読み込まれたら、状態を更新
-            setImageUrls(imageUrls);
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+    setFiles(files);
+
+    const imageUrls = Array.from(files).map(file => URL.createObjectURL(file));
+    setImageUrls(imageUrls);
   }
-  
 
   return (
     <div className="flex justify-center h-[calc(100vh-7rem)] w-full mt-5">
@@ -88,7 +79,7 @@ function CreatePost() {
       <div className=' bg-slate-50 ml-5 h-3/6 w-1/6 rounded-lg shadow-md flex flex-col gap-8 p-8'>
         <h1 className=' font-bold'>投稿</h1>
         <Button 
-          onClick={() => createNewPost(exercisesData, text)}
+          onClick={() => createNewPost(exercisesData, text, fileList)}
           className='blue'
           original='py-2 px-12'
           title='投稿する'

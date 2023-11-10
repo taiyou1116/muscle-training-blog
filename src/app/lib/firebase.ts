@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { addDoc, collection, collectionGroup, doc, getDoc, getDocs, getFirestore, query, setDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_APIKEY,
@@ -19,8 +20,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 const db = getFirestore(app);
-
-export { auth, provider, db };
+const storage = getStorage(app);
 
 
 // Googleでサインイン & DBと紐付け
@@ -57,8 +57,23 @@ export const showUserProfile = () => {
   return photoURL;
 }
 
+const handleFileChanges = async (files: FileList) => {
+  
+  const filesArray = Array.from(files);
+
+  const imageUrls = await Promise.all(
+    filesArray.map(async (file) => {
+      const storageRef = ref(storage, `images/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const imageUrl = await getDownloadURL(storageRef);
+      return imageUrl;
+    })
+  );
+    return imageUrls;
+};
+
 /**与えられたユーザーIDに基づいて、新しい投稿をFirestoreのサブコレクションに追加します。*/
-export const createNewPost = async (exercisesData: any, text: string) => {
+export const createNewPost = async (exercisesData: any, text: string, files?: FileList) => {
   const uid = auth.currentUser?.uid;
   if (!uid) {
     console.error('ユーザーが認証されていません。');
@@ -71,10 +86,16 @@ export const createNewPost = async (exercisesData: any, text: string) => {
     // サブコレクションへの参照を取得
     const subCollectionRef = collection(postDocRef, 'sub');
 
+    let imageUrl = null;
+    if (files) {
+      imageUrl = await handleFileChanges(files);
+    }
+
     // 新しいドキュメントをサブコレクションに追加
     const docRef = await addDoc(subCollectionRef, {
       exercisesData: exercisesData,
-      text: text
+      text: text,
+      imageUrl: imageUrl,
     });
 
     console.log('Document successfully written!');
