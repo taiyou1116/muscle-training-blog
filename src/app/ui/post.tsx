@@ -29,19 +29,35 @@ function Post(props: Props) {
           <p className="text-lg font-bold text-gray-800">{data.parentData.displayName}</p>
         </div>
       </div>
-      <div className=''>
+      <div>
         { data.exercisesData.map((d: ExerciseData, dataIndex: number) => (
-        <div key={dataIndex} className="mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">{d.selectedExercise}</h2>
-          {d.sets.map((set, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <span>{ index + 1 }セット目: </span>
-              <span>Reps: {set.reps} </span>
-              <span>Weight: {set.weight}</span>
+          <div key={dataIndex} className="mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">{d.selectedExercise}</h2>
+            {d.sets.map((set, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <span>{ index + 1 }セット目: </span>
+                <span>Reps: {set.reps} </span>
+                <span>Weight: {set.weight}</span>
+              </div>
+            ))}
+          </div>
+        )) }
+      </div>
+
+      <div>
+        { data.imageUrl ? (
+          <div>
+          { data.imageUrl.map((url: string, index: number) => (
+            <div key={index}>
+              <Image src={url} width={50} height={50} alt='body image' />
             </div>
-          ))}
-        </div>
-      )) }
+          )) }
+          </div>
+        ) : (
+          <div>
+            なし
+          </div>
+        )}
       </div>
       
       <div className="mt-6 text-gray-700">
