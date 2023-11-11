@@ -8,6 +8,7 @@ import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
 
 const MAX_SIZE = 2 * 1024 * 1024;
 
@@ -19,6 +20,21 @@ function CreatePost() {
   const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
   const [text, setText] = useState('');
   const [ fileList, setFiles ] = useState<FileList>();
+  const router = useRouter();
+
+  const BackRoot = () => {
+    router.push("/");
+    router.refresh();
+  }
+
+  const handleCreatePost = async () => {
+    const success = await createNewPost(exercisesData, text, fileList);
+    if (success) {
+      BackRoot();
+    } else {
+      alert("投稿に失敗しました。再度投稿してください。");
+    }
+  };
   
 
   const addExerciseData = (newData: ExerciseData) => {
@@ -94,7 +110,7 @@ function CreatePost() {
       <div className=' bg-slate-50 ml-5 h-3/6 w-1/6 rounded-lg shadow-md flex flex-col gap-8 p-8'>
         <h1 className=' font-bold'>投稿</h1>
         <Button 
-          onClick={() => createNewPost(exercisesData, text, fileList)}
+          onClick={handleCreatePost}
           className='blue'
           original='py-2 px-12'
           title='投稿する'

@@ -1,4 +1,5 @@
 
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { addDoc, collection, collectionGroup, doc, getDoc, getDocs, getFirestore, query, setDoc } from "firebase/firestore";
@@ -78,7 +79,7 @@ export const createNewPost = async (exercisesData: any, text: string, files?: Fi
   const uid = auth.currentUser?.uid;
   if (!uid) {
     console.error('ユーザーが認証されていません。');
-    return;
+    return false;
   }
   
   try {
@@ -100,8 +101,11 @@ export const createNewPost = async (exercisesData: any, text: string, files?: Fi
     });
 
     console.log('Document successfully written!');
+    return true;
+
   } catch (e) {
     console.error('Error writing document: ', e);
+    return false;
   }
 }
 
