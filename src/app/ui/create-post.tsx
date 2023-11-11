@@ -91,10 +91,42 @@ function CreatePost() {
         }
 
         { showForm && <ExercisePostForm setShowForm={setShowForm} addExerciseData={addExerciseData} /> }
+        
+        {/* 種目だけ決めて、詳細はダイアログで表示 */}
+        <div className='flex gap-1'>
+          { exercisesData.map((data, index) => (
+            <div key={index}>
+              <button className=" font-bold text-xs text-white bg-orange-300 py-2 px-4 rounded-full">{data.selectedExercise}</button>
+            </div>
+          )) }
+        </div>
 
-        { exercisesData.map((data, index) => (
-          <p key={index}>{`${data.selectedExercise} - セット数: ${data.sets.length}, 各セット: ${data.sets.map(set => `${set.weight}kg x ${set.reps}回`).join(', ')}`}</p>
-        ))}
+        {/* 詳細ダイアログにする */}
+        {/* <div className=''>
+          { exercisesData.map((data, index) => (
+            <div key={index} className=' border-2 rounded-lg py-10 px-20 '>
+              <h2 className="font-semibold text-gray-700">{data.selectedExercise}</h2>
+              <table className="min-w-full table-auto">
+                <thead>
+                  <tr>
+                    <th className="px-4 font-normal">セット</th>
+                    <th className="px-4 font-normal">レップス</th>
+                    <th className="px-4 font-normal">重量(kg)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.sets.map((set, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="px-4 text-center">{index + 1}</td>
+                      <td className="px-4 text-center">{set.reps}</td>
+                      <td className="px-4 text-center">{set.weight}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div> */}
 
         {/* 写真の表示 */}
         <div className='flex gap-3'>
@@ -138,6 +170,8 @@ function ExercisePostForm(props: FormProps) {
   const { setShowForm, addExerciseData } = props;
   // 選択された筋トレの種目を保持するための状態
   const [selectedExercise, setSelectedExercise] = useState("");
+  // セット数とそれに対応する重さと回数を保持するためのstate
+  const [sets, setSets] = useState<Set[]>([{ weight: '', reps: '' }]);
 
   // 利用可能な筋トレの種目
   const exercises = [
@@ -160,6 +194,21 @@ function ExercisePostForm(props: FormProps) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!selectedExercise) {
+      alert('種目の選択をしてください。');
+      return; 
+    }
+    for(let i = 0; i < sets.length; i++) {
+      if (!sets[i].reps) {
+        alert('レップを入力してください。');
+        return; 
+      }
+      if (!sets[i].weight) {
+        alert('ウェイトを入力してください。');
+        return; 
+      }
+    }
+
     // 新しいエクササイズデータを作成
     const newExerciseData: ExerciseData = {
       selectedExercise,
@@ -170,9 +219,6 @@ function ExercisePostForm(props: FormProps) {
     addExerciseData(newExerciseData);
     setShowForm(false);
   };
-
-  // セット数とそれに対応する重さと回数を保持するためのstate
-  const [sets, setSets] = useState<Set[]>([{ weight: '', reps: '' }]);
 
   // セット数が変更されたときに呼ばれる関数
   const handleSetCountChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -222,7 +268,7 @@ function ExercisePostForm(props: FormProps) {
       </div>
 
       {/* セットごとの重さと回数入力 */}
-      <div className='overflow-auto max-h-64 w-full flex flex-col gap-1'>
+      <div className='overflow-auto max-h-64 w-full flex flex-col gap-1 p-1'>
         {sets.map((set, index) => (
           <div key={index} className='flex gap-2 w-full max-w-md items-center justify-center'>
             <span>{`${index + 1}セット目:`}</span>

@@ -48,7 +48,7 @@ function Post(props: Props) {
       </div>
 
       {/* 筋トレ内容 */}
-      <div className='mt-6 p-10 rounded-lg shadow-lg bg-slate-200 mb-3 flex flex-col gap-3'>
+      <div className='mt-6 p-5 rounded-lg shadow-lg bg-slate-200 mb-3 flex flex-col gap-3'>
         {/* 表形式試す */}
         <h2 className=' mt-5 ml-3 font-bold'>🔥ワークアウト</h2>
         { data.exercisesData.map((d: ExerciseData, dataIndex: number) => (
