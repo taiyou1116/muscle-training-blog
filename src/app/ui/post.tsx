@@ -31,22 +31,8 @@ function Post(props: Props) {
           <p className="text-lg font-bold text-gray-800">{data.parentData.displayName}</p>
         </div>
       </div>
-      <div className=' p-3 rounded-lg shadow-lg bg-slate-200 mb-3 flex flex-col gap-3'>
-        <h2 className=' mt-5 ml-3 font-bold'>💪ワークアウト</h2>
-        { data.exercisesData.map((d: ExerciseData, dataIndex: number) => (
-          <div key={dataIndex} className=" bg-white p-4 rounded-lg">
-            <h2 className="font-semibold text-gray-700 mb-3">{d.selectedExercise}</h2>
-            {d.sets.map((set, index) => (
-              <div key={index} className="grid grid-cols-6 gap-5 items-center">
-                <span className="">セット {index + 1}:</span>
-                <span>レップ:  {set.reps} </span>
-                <span className='flex items-center'> <FontAwesomeIcon icon={faDumbbell} height={20} />: {set.weight} kg </span>
-              </div>
-            ))}
-          </div>
-        )) }
-      </div>
 
+      {/* 写真表示 */}
       <div>
         { data.imageUrl ? (
           <div className='flex'>
@@ -60,7 +46,37 @@ function Post(props: Props) {
           <div></div>
         )}
       </div>
+
+      {/* 筋トレ内容 */}
+      <div className='mt-6 p-10 rounded-lg shadow-lg bg-slate-200 mb-3 flex flex-col gap-3'>
+        {/* 表形式試す */}
+        <h2 className=' mt-5 ml-3 font-bold'>🔥ワークアウト</h2>
+        { data.exercisesData.map((d: ExerciseData, dataIndex: number) => (
+          <div key={dataIndex} className=" bg-white p-4 rounded-lg">
+            <h2 className="font-semibold text-gray-700 mb-3">{d.selectedExercise}</h2>
+            <table className="min-w-full table-auto">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2">セット</th>
+                  <th className="px-4 py-2">レップス</th>
+                  <th className="px-4 py-2">重量(kg)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.sets.map((set, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="px-4 py-2 text-center">{index + 1}</td>
+                    <td className="px-4 py-2 text-center">{set.reps}</td>
+                    <td className="px-4 py-2 text-center">{set.weight}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )) }
+      </div>
       
+      {/* 本文 */}
       <div className="mt-6 text-gray-700">
         { data.text }
       </div>
