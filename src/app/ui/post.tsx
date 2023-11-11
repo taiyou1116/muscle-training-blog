@@ -34,7 +34,7 @@ function Post(props: Props) {
 
       {/* 写真表示 */}
       <div>
-        { data.imageUrl ? (
+        { data.imageUrl !== null ? (
           <div className='flex'>
           { data.imageUrl.map((url: string, index: number) => (
             <div key={index}>

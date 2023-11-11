@@ -20,27 +20,30 @@ function CreatePost() {
   const [exercisesData, setExercisesData] = useState<ExerciseData[]>([]);
   const [text, setText] = useState('');
   const [ fileList, setFiles ] = useState<FileList>();
-  const router = useRouter();
+  const router = useRouter(); 
 
-  const BackRoot = () => {
-    router.push("/");
-    router.refresh();
-  }
-
+  // Postを新規作成
   const handleCreatePost = async () => {
     const success = await createNewPost(exercisesData, text, fileList);
     if (success) {
-      BackRoot();
+      router.push("/");
+      router.refresh();
     } else {
       alert("投稿に失敗しました。再度投稿してください。");
     }
   };
   
-
+  // メニュー情報を末尾に追加
   const addExerciseData = (newData: ExerciseData) => {
     setExercisesData([...exercisesData, newData]);
   };
 
+  // メニューを削除
+  const deleteExerciseData = (deleteData: ExerciseData) => {
+    // ボタンのインデックスを配列のインデックスがあったら消す
+  }
+
+  // 写真の追加, 一時データ(imageUrls), 実際に送る(fileList)
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     if (e.target.files.length > 2) {
