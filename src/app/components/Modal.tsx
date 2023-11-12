@@ -1,5 +1,6 @@
 import { Fragment, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import Button from './Button';
 
 type ModalProps = {
     children: ReactNode, //タグの内側の要素を扱う
@@ -38,7 +39,14 @@ function Modal(props: ModalProps) {
         >
           <div className="fixed flex inset-0 items-center justify-center p-4">
             <Dialog.Panel className="bg-gray-50 dark:bg-slate-600 dark:text-white p-6 rounded-md shadow-md">
-              <Dialog.Title className="mb-4 font-medium">{title}</Dialog.Title>
+              <Dialog.Title className="mb-4 font-medium flex justify-between items-center">
+                {title} 
+                <Button 
+                  title='削除'
+                  className='red'
+                  original=' px-4 py-2 text-xs'
+                />
+              </Dialog.Title>
               {children}
             </Dialog.Panel>
           </div>

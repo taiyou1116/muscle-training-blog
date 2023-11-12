@@ -2,7 +2,7 @@ import React from 'react'
 
 type Props = {
     onClick?: () => void,
-    className?: 'blue' | 'slate',
+    className?: 'blue' | 'red' |  'slate',
     original?: string,
     title: string,
     emoji?: JSX.Element,
@@ -15,6 +15,7 @@ function Button(props: Props) {
   // パディングだけはoriginalで決める   
   const buttonStyle = {
     blue: `bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 ${ original } `,
+    red: `bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 ${ original } `,
     slate: `bg-slate-500 text-white font-bold rounded-lg hover:bg-slate-600 ${ original } `,
     original: ` ${ original }`,
   }

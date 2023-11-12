@@ -18,6 +18,7 @@ function TrainingDetails(props: TrainingDetailsProps) {
     <Modal open={open} onClose={() => handleClose()} title={data.selectedExercise}>
       <div className=''>
         <div className=' border-2 rounded-lg py-10 px-20 '>
+          {/* 削除と追加 */}
           <table className="min-w-full table-auto">
             <thead>
               <tr>

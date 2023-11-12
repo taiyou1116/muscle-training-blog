@@ -100,14 +100,17 @@ function CreatePost() {
         { showForm && <ExercisePostForm setShowForm={setShowForm} addExerciseData={addExerciseData} /> }
         
         {/* 種目だけ決めて、詳細はダイアログで表示 */}
-        <div className='flex gap-1'>
+        <div className='w-full flex gap-3 '>
           { exercisesData.map((data, index) => (
             <div key={index}>
-              <button 
-                className=" font-bold text-xs text-white bg-orange-300 py-2 px-4 rounded-full"
-                onClick={() => showDetail(index)}
-              >
-                {data.selectedExercise}
+              <button className='flex items-center pl-5 border-2 rounded-full'>
+                ✖
+                <button 
+                  className=" font-bold text-xs text-black py-2 px-4 rounded-full"
+                  onClick={() => showDetail(index)}
+                >
+                  {data.selectedExercise}
+                </button>
               </button>
             </div>
           )) }
