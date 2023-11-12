@@ -14,7 +14,7 @@ function Post(props: Props) {
   const { data } = props;
 
   return (
-    <div className='bg-white rounded-lg shadow p-6'>
+    <div className='bg-white rounded-lg p-6'>
       <div className=' flex items-center mb-6'>
         {data.parentData.photoURL ? (
           <Image

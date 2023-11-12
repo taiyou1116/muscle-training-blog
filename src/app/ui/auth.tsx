@@ -40,6 +40,7 @@ export function UserInfo() {
           alt="User profile picture" // alt属性
           width={40} // 画像の幅
           height={40} // 画像の高さ
+          className="rounded-full"
         />
       ) : (
         <p>No profile picture available</p>

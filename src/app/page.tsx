@@ -5,7 +5,7 @@ import Loading from "./ui/loading";
 export default function Home() {
 
   return (
-    <div className="flex justify-center h-screen w-full mt-5">
+    <div className="flex justify-center h-screen w-full">
       <Suspense fallback={<Loading />}>
         <TimeLine />
       </Suspense>
