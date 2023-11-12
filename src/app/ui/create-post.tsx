@@ -25,6 +25,7 @@ function CreatePost() {
 
   // Modalのopen状態
   const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [dataNum, setDataNum] = useState<number>(0);
 
   // Postを新規作成
   const handleCreatePost = async () => {
@@ -43,8 +44,9 @@ function CreatePost() {
   };
 
   // メニューを削除
-  const deleteExerciseData = (deleteData: ExerciseData) => {
-    // ボタンのインデックスを配列のインデックスがあったら消す
+  const showDetail = (i: number) => {
+    setDataNum(i);
+    setDetailModalOpen(true);
   }
 
   // 写真の追加, 一時データ(imageUrls), 実際に送る(fileList)
@@ -93,7 +95,8 @@ function CreatePost() {
             </div>
           </div>
         }
-
+        
+        {/* 種目追加項目 */}
         { showForm && <ExercisePostForm setShowForm={setShowForm} addExerciseData={addExerciseData} /> }
         
         {/* 種目だけ決めて、詳細はダイアログで表示 */}
@@ -102,40 +105,13 @@ function CreatePost() {
             <div key={index}>
               <button 
                 className=" font-bold text-xs text-white bg-orange-300 py-2 px-4 rounded-full"
-                onClick={() => setDetailModalOpen(true)}
+                onClick={() => showDetail(index)}
               >
                 {data.selectedExercise}
               </button>
             </div>
           )) }
         </div>
-
-        {/* 詳細ダイアログにする */}
-        {/* <div className=''>
-          { exercisesData.map((data, index) => (
-            <div key={index} className=' border-2 rounded-lg py-10 px-20 '>
-              <h2 className="font-semibold text-gray-700">{data.selectedExercise}</h2>
-              <table className="min-w-full table-auto">
-                <thead>
-                  <tr>
-                    <th className="px-4 font-normal">セット</th>
-                    <th className="px-4 font-normal">レップス</th>
-                    <th className="px-4 font-normal">重量(kg)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.sets.map((set, index) => (
-                    <tr key={index} className="border-b">
-                      <td className="px-4 text-center">{index + 1}</td>
-                      <td className="px-4 text-center">{set.reps}</td>
-                      <td className="px-4 text-center">{set.weight}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
-        </div> */}
 
         {/* 写真の表示 */}
         <div className='flex gap-3'>
@@ -145,12 +121,14 @@ function CreatePost() {
             </div>
           )) }
         </div>
-
+        
+        {/* 自由欄 */}
         <div className=' bg-slate-200 h-full w-full rounded-md p-3 shadow-lg'>
           <textarea onChange={(e) => setText(e.target.value)} placeholder='自由欄: 好きなことを書こう(300文字まで)' className='bg-slate-200 h-full w-full rounded-md p-3 outline-none resize-none'/>
         </div>
       </div>
-
+      
+      {/* 右の投稿群 */}
       <div className=' bg-slate-50 ml-5 h-3/6 w-1/6 rounded-lg shadow-md flex flex-col gap-8 p-8'>
         <h1 className=' font-bold'>投稿</h1>
         <Button 
@@ -163,13 +141,17 @@ function CreatePost() {
           下書き保存
         </button>
       </div>
-
-
-      {/* Modal */}
-      <TrainingDetails 
-        onClose={() => setDetailModalOpen(false)}
-        open={detailModalOpen}
-      />
+      
+       {/* Modal */}
+      { exercisesData[dataNum] && (
+        <div>
+          <TrainingDetails 
+            onClose={() => setDetailModalOpen(false)}
+            open={detailModalOpen}
+            data={exercisesData[dataNum]}
+          />
+        </div>
+      )}
     </div>
   )
 }
