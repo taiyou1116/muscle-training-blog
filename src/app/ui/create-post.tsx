@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDumbbell } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
+import TrainingDetails from '../components/training-details';
 
 const MAX_SIZE = 2 * 1024 * 1024;
 
@@ -21,6 +22,9 @@ function CreatePost() {
   const [text, setText] = useState('');
   const [ fileList, setFiles ] = useState<FileList>();
   const router = useRouter(); 
+
+  // Modalのopen状態
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
 
   // Postを新規作成
   const handleCreatePost = async () => {
@@ -96,7 +100,12 @@ function CreatePost() {
         <div className='flex gap-1'>
           { exercisesData.map((data, index) => (
             <div key={index}>
-              <button className=" font-bold text-xs text-white bg-orange-300 py-2 px-4 rounded-full">{data.selectedExercise}</button>
+              <button 
+                className=" font-bold text-xs text-white bg-orange-300 py-2 px-4 rounded-full"
+                onClick={() => setDetailModalOpen(true)}
+              >
+                {data.selectedExercise}
+              </button>
             </div>
           )) }
         </div>
@@ -154,6 +163,13 @@ function CreatePost() {
           下書き保存
         </button>
       </div>
+
+
+      {/* Modal */}
+      <TrainingDetails 
+        onClose={() => setDetailModalOpen(false)}
+        open={detailModalOpen}
+      />
     </div>
   )
 }
